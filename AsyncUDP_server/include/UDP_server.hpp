@@ -44,19 +44,7 @@ public:
         m_service.stop();
         ptr_udp_sock->shutdown(boost::asio::ip::udp::socket::shutdown_both);
     }
-//    void send_responce (boost::asio::yield_context yield, shared_udp_socket socket,
-//                        boost::asio::ip::udp::endpoint ep, boost::shared_array<T> buffer, size_t size) {
 
-//        socket->async_send_to(boost::asio::buffer(msg, msg.length()), ep, yield);
-//        {
-//            size_t byte_transfered = ptr_pac_fractal->random_init_2().size();
-//            buffer.reset(new T[byte_transfered]);
-//            for(size_t i = 0; i < byte_transfered; ++i) {
-//                buffer[i] = ptr_pac_fractal->random_init_2().at(i);
-//            }
-//            socket->async_send_to(boost::asio::buffer(buffer.get(), byte_transfered), ep, yield);
-//        }
-//    }
     template<typename F1>
     void send_responce(boost::asio::yield_context yield, shared_udp_socket socket, const boost::asio::ip::udp::endpoint& ep,
                       const typename boost::enable_if<std::is_same<F1, std::string>, F1>::type& request) {
@@ -84,9 +72,7 @@ public:
             bio_scnr.constract(number); //передаем ему номер
             sensor snsr;                //создаем экземпляр класса Датчик
             auto result = bio_scnr.get_biometric_result(); //получаем результат от методов биометрический сканер
-//            bio_scnr.uuids();           //распечатываем UUID сканера
-//            bio_scnr.print_biometric(); //распечатываем пару биометрический сканер
-//            std::cout << " Biometric scanner: " << result << ";\t sensor: " << snsr.get_sensor_data() << std::endl;
+
 
             callback(byte_recived, m_ec, " Biometric scanner: ", bio_scnr.get_biometric_result(), ";\t sensor: ", snsr.get_sensor_data(), bio_scnr.uuids(), bio_scnr.print_biometric());
             boost::asio::spawn(ptr_udp_sock->get_executor(), boost::bind(&UDP_server::send_responce<std::string>,
